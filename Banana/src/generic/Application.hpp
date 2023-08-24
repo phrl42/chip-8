@@ -42,7 +42,7 @@ namespace Banana
   public:
     Banana::Shr<Banana::Framebuffer> fb;
     // this stays as long as I do not have a better idea
-    Banana::SoundHelper soundhelper;
+    Banana::SoundHelper* soundhelper;
   };
 
   // definition is in client

@@ -16,7 +16,6 @@ namespace Banana
   Application* Application::Instance = nullptr;
 
   Application::Application()
-  : soundhelper(SoundHelper())
   {
     if(Instance)
     {
@@ -43,7 +42,8 @@ namespace Banana
     fb = Banana::Framebuffer::Create(spec);
 
     debug_layer = new Banana::IMGUILayer("IMGUILAYER");
-
+    
+    soundhelper = new SoundHelper();
     //Text::Init("assets/fonts/mononoki.ttf");
   }
 
@@ -177,7 +177,7 @@ namespace Banana
 
   Application::~Application()
   {
-  
+    delete soundhelper;
   }
 
 };

@@ -25,7 +25,6 @@ namespace Banana
 
       ~SoundHelper()
       {
-        LOG("Deleting sound engine");
         ma_engine_stop(&engine);
         ma_engine_uninit(&engine);
       }
