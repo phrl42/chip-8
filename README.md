@@ -4,6 +4,11 @@ This is an experimental game engine which I personally use to learn about graphi
 
 I have been inspired by <a href="https://github.com/TheCherno/Hazel">Cherno</a> in terms of abstraction.
 
+# To Do:
+
+- [ ] rework Renderer2D (it looks awful because of rotation)
+- [ ] fix msdf-atlas-gen not being able to display a font atlas
+
 # Instructions
 
 In order to generate makefiles, run:

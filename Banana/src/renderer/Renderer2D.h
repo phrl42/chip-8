@@ -27,6 +27,9 @@ namespace Banana
     static void Flush();
 
     static void DrawQuad(const glm::vec3& pos, const glm::vec2& size, const glm::vec4& color, float rotation, Projection proj = NONE);
+    static void DrawQuad(const glm::vec3& pos, const glm::vec2& size, const glm::vec4& color, Projection proj = NONE);
+    
+    static void DrawQuad(const glm::vec3& pos, const glm::vec2& size, const glm::vec4& color, const Shr<Texture2D>& texture, Projection proj = NONE);
     static void DrawQuad(const glm::vec3& pos, const glm::vec2& size, const glm::vec4& color, float rotation, const Shr<Texture2D>& texture, Projection proj = NONE);
   };
 };

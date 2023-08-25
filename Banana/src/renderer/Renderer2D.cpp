@@ -154,6 +154,72 @@ namespace Banana
     }
   }
 
+  void Renderer2D::DrawQuad(const glm::vec3& pos, const glm::vec2& size, const glm::vec4& color, const Shr<Texture2D>& texture, Projection proj)
+  {
+    if(texture == nullptr)
+    {
+      LOG("Omitted nullptr texture in renderer: Please initialize your texture");
+      return;
+    }
+    
+		if (data.QuadIndexCount >= data.MAX_INDICES)
+			NextBatch();
+    
+		float textureIndex = 0.0f;
+		for (uint32_t i = 1; i < data.TextureSlotIndex; i++)
+		{
+			if (*data.TextureSlots[i] == *texture)
+			{
+				textureIndex = (float)i;
+				break;
+			}
+		}
+
+		if (textureIndex == 0.0f)
+		{
+      if(data.TextureSlotIndex >= data.MAX_TEXTURE_SLOTS)
+        NextBatch();
+      
+			textureIndex = (float)data.TextureSlotIndex;
+			data.TextureSlots[data.TextureSlotIndex] = texture;
+			data.TextureSlotIndex++;
+    }
+    
+    // bottom left
+    data.quad_vertex_ptr->position = glm::vec4({pos, 1.0f});
+    data.quad_vertex_ptr->color = color;
+    data.quad_vertex_ptr->tex_coords = {0, 0};
+    data.quad_vertex_ptr->projID = proj;
+    data.quad_vertex_ptr->texID = textureIndex;
+    data.quad_vertex_ptr++;
+    
+    // bottom right
+    data.quad_vertex_ptr->position = glm::vec4({pos.x + size.x, pos.y, pos.z, 1.0f});
+    data.quad_vertex_ptr->color = color;
+    data.quad_vertex_ptr->tex_coords = {1.0f, 0.0f};
+    data.quad_vertex_ptr->projID = proj;
+    data.quad_vertex_ptr->texID = textureIndex;
+    data.quad_vertex_ptr++;
+
+    // top left
+    data.quad_vertex_ptr->position = glm::vec4({pos.x, pos.y + size.y, pos.z, 1.0f});
+    data.quad_vertex_ptr->color = color;
+    data.quad_vertex_ptr->tex_coords = {0.0f, 1.0f};
+    data.quad_vertex_ptr->projID = proj;
+    data.quad_vertex_ptr->texID = textureIndex;
+    data.quad_vertex_ptr++;
+
+    // top right
+    data.quad_vertex_ptr->position = glm::vec4({pos.x + size.x, pos.y + size.y, pos.z, 1.0f});
+    data.quad_vertex_ptr->color = color;
+    data.quad_vertex_ptr->tex_coords = {1.0f, 1.0f};
+    data.quad_vertex_ptr->projID = proj;
+    data.quad_vertex_ptr->texID = textureIndex;
+    data.quad_vertex_ptr++;
+
+    data.QuadIndexCount += 6;
+  }
+
   void Renderer2D::DrawQuad(const glm::vec3& pos, const glm::vec2& size, const glm::vec4& color, float rotation, const Shr<Texture2D>& texture, Projection proj)
   {
     if(texture == nullptr)
@@ -230,11 +296,53 @@ namespace Banana
     data.QuadIndexCount += 6;
   }
 
+  void Renderer2D::DrawQuad(const glm::vec3& pos, const glm::vec2& size, const glm::vec4& color, Projection proj)
+  {
+    if (data.QuadIndexCount >= data.MAX_INDICES)
+    {
+      NextBatch();
+    }
+
+    // bottom left
+    data.quad_vertex_ptr->position = glm::vec4({pos, 1.0f});
+    data.quad_vertex_ptr->color = color;
+    data.quad_vertex_ptr->tex_coords = {0, 0};
+    data.quad_vertex_ptr->projID = proj;
+    data.quad_vertex_ptr->texID = -1;
+    data.quad_vertex_ptr++;
+    
+
+    // bottom right
+    data.quad_vertex_ptr->position = glm::vec4({pos.x + size.x, pos.y, pos.z, 1.0f});
+    data.quad_vertex_ptr->color = color;
+    data.quad_vertex_ptr->tex_coords = {1, 0};
+    data.quad_vertex_ptr->projID = proj;
+    data.quad_vertex_ptr->texID = -1;
+    data.quad_vertex_ptr++;
+
+    // top left
+    data.quad_vertex_ptr->position = glm::vec4({pos.x, pos.y + size.y, pos.z, 1.0f});
+    data.quad_vertex_ptr->color = color;
+    data.quad_vertex_ptr->tex_coords = {0, 1};
+    data.quad_vertex_ptr->projID = proj;
+    data.quad_vertex_ptr->texID = -1;
+    data.quad_vertex_ptr++;
+
+    // top right
+    data.quad_vertex_ptr->position = glm::vec4({pos.x + size.x, pos.y + size.y, pos.z, 1.0f});
+    data.quad_vertex_ptr->color = color;
+    data.quad_vertex_ptr->tex_coords = {1, 1};
+    data.quad_vertex_ptr->projID = proj;
+    data.quad_vertex_ptr->texID = -1;
+    data.quad_vertex_ptr++;
+
+    data.QuadIndexCount += 6;
+  } 
+    
   void Renderer2D::DrawQuad(const glm::vec3& pos, const glm::vec2& size, const glm::vec4& color, float rotation, Projection proj)
   {
     if (data.QuadIndexCount >= data.MAX_INDICES)
     {
-      LOG(pos.x);
       NextBatch();
     }
     glm::mat4 transform = glm::translate(glm::mat4(1.0f), pos)
@@ -249,9 +357,6 @@ namespace Banana
 
     // bottom left
     data.quad_vertex_ptr->position = transform * glm::vec4({pos, 1.0f});
-    if(proj != 2)
-      LOG(proj);
-    
     data.quad_vertex_ptr->color = color;
     data.quad_vertex_ptr->tex_coords = {0, 0};
     data.quad_vertex_ptr->projID = proj;
