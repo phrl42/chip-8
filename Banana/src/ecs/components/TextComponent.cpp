@@ -10,19 +10,18 @@ namespace Banana
     this->name = "TextComponent";
     this->font_width = font_width;
     this->font_height = font_height;
-
-    ChangeText(text);
-    
+    this->text = text;
   }
 
   void TextComponent::OnUpdate(float dt, const Transform &transform)
   {
-    Renderer2D::DrawQuad(transform.pos, transform.size, transform.color, transform.rotation, font_texture->GetAtlasTexture(), transform.proj);
+    //Renderer2D::DrawQuad(transform.pos, transform.size, transform.color, transform.rotation, font_texture->GetAtlasTexture(), transform.proj);
+    Renderer2D::DrawText(text, font_texture, transform.pos, transform.size, transform.color, transform.proj);
   }
 
   void TextComponent::ChangeText(const std::string& text)
   {
-    
+    this->text = text;  
   }
 
 };

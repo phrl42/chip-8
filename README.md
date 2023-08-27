@@ -6,7 +6,6 @@ I have been inspired by <a href="https://github.com/TheCherno/Hazel">Cherno</a> 
 
 # To Do:
 
-- [ ] rework Renderer2D (it looks awful because of rotation)
 - [ ] fix msdf-atlas-gen not being able to display a font atlas
 
 # Instructions

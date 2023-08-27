@@ -21,7 +21,7 @@ namespace SANDBOX
   {
     static float x = 0;
     static float y = 0;
-    static float z = 10;
+    static float z = -10;
 
     if(Banana::Input::IsKeyPressed(KEY_S))
     {
@@ -40,7 +40,7 @@ namespace SANDBOX
 
     if(Banana::Input::IsKeyPressed(KEY_D))
     {
-      x += 70 * dt;
+      x += 10 * dt;
     }
 
     if(Banana::Input::IsKeyPressed(KEY_T))

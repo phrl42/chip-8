@@ -10,8 +10,8 @@ namespace SANDBOX
   TestLayer::TestLayer(const std::string& name)
   : name(name), sound(Banana::Sound("assets/sounds/test.wav")), b_sound(Banana::Sound("assets/sounds/menu.wav", true))
   {
-    ent.transform.pos = {0, 0, 1};
-    ent.transform.size = {5, 5, 0};
+    ent.transform.pos = {0, 0, 0};
+    ent.transform.size = {2, 2, 0};
     //ent.transform.color = {1, 0.5, -1.0f, 1.0f};
     ent.transform.color = {1.0f, 1.0f, 1.0f, 1.0f};
     ent.transform.proj = Banana::Projection::PERSPECTIVE;

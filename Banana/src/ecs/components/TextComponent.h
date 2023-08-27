@@ -20,6 +20,6 @@ namespace Banana
     Shr<Font> font_texture;
     int font_width;
     int font_height;
-
+    std::string text;
   };
 };

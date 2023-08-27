@@ -25,8 +25,16 @@ namespace Banana
 
 		msdfgen::BitmapConstRef<T, N> bitmap = (msdfgen::BitmapConstRef<T, N>)generator.atlasStorage();
 
-		Shr<Texture2D> texture = Texture2D::Create((void*)bitmap.pixels, bitmap.width, bitmap.height);
-		//texture->SetData(, bitmap.width * bitmap.height * 3);
+    TextureSpecification spec;
+    spec.width = bitmap.width;
+    spec.height = bitmap.height;
+    spec.format = ImageFormat::RGB8;
+    spec.GenerateMips = false;
+    spec.data = (void*)bitmap.pixels;
+    spec.size = bitmap.width * bitmap.height * 3;
+
+    Shr<Texture2D> texture = Texture2D::Create(spec);
+
 		return texture;
 	}
 
@@ -114,7 +122,7 @@ namespace Banana
 
     // save glyph to fs
 
-#if 0
+#if 1
 		msdfgen::Shape shape;
 		if (msdfgen::loadGlyph(shape, font, 'C'))
 		{

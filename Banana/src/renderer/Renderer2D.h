@@ -4,6 +4,7 @@
 #include "utility.h"
 
 #include "generic/Camera.h"
+#include "generic/Font.h"
 
 namespace Banana
 {
@@ -31,5 +32,7 @@ namespace Banana
     
     static void DrawQuad(const glm::vec3& pos, const glm::vec2& size, const glm::vec4& color, const Shr<Texture2D>& texture, Projection proj = NONE);
     static void DrawQuad(const glm::vec3& pos, const glm::vec2& size, const glm::vec4& color, float rotation, const Shr<Texture2D>& texture, Projection proj = NONE);
+
+    static void DrawText(const std::string& text, Shr<Font> font, const glm::vec3& pos, const glm::vec3& size, const glm::vec4& color, Projection proj = NONE);
   };
 };
