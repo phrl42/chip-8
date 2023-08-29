@@ -10,14 +10,14 @@ namespace SANDBOX
   TestLayer::TestLayer(const std::string& name)
   : name(name), sound(Banana::Sound("assets/sounds/test.wav")), b_sound(Banana::Sound("assets/sounds/menu.wav", true))
   {
-    ent.transform.pos = {0, 0, 0};
-    ent.transform.size = {2, 2, 0};
+    ent.transform.pos = {-1, 0, 0};
+    ent.transform.size = {0.2, 0.2, 0};
     //ent.transform.color = {1, 0.5, -1.0f, 1.0f};
     ent.transform.color = {1.0f, 1.0f, 1.0f, 1.0f};
-    ent.transform.proj = Banana::Projection::PERSPECTIVE;
+    ent.transform.proj = Banana::Projection::NONE;
 
     //ent.AddComponent(new Banana::QuadComponent("assets/textures/banana.png"));
-    ent.AddComponent(new Banana::TextComponent("test"));
+    ent.AddComponent(new Banana::TextComponent("autistic double"));
     b_sound.Start();
   }
 

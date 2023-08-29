@@ -6,7 +6,25 @@ I have been inspired by <a href="https://github.com/TheCherno/Hazel">Cherno</a> 
 
 # To Do:
 
-- [ ] fix msdf-atlas-gen not being able to display a font atlas
+- [x] input system
+
+- [x] get an infrastructure to work
+
+- [x] implement batch renderer
+
+- [x] sound system
+
+- [x] text rendering
+
+- [ ] add debugging stuff to imgui
+
+- [ ] optimize Renderer2D
+
+- [ ] circle renderer
+
+- [ ] line renderer
+
+- [x] have fun
 
 # Instructions
 

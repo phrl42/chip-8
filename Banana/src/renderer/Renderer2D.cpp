@@ -444,51 +444,81 @@ namespace Banana
 
   void Renderer2D::DrawText(const std::string& text, Shr<Font> font, const glm::vec3& pos, const glm::vec3& size, const glm::vec4& color, Projection proj)
   {
-    const auto& fontGeometry = font->GetMSDFData()->FontGeometry;
-    const auto& metrics = fontGeometry.getMetrics();
-    Shr<Texture2D> fontAtlas = font->GetAtlasTexture(); 
-    data.FontAtlasTexture = fontAtlas;
-    double x = 0.0;
-    double fsScale = 1.0 / (metrics.ascenderY - metrics.descenderY);
-    double y = 0.0;
-    float lineHeightOffset = 0.0f;
+		const auto& fontGeometry = font->GetMSDFData()->FontGeometry;
+		const auto& metrics = fontGeometry.getMetrics();
+		Shr<Texture2D> fontAtlas = font->GetAtlasTexture();
+
+		data.FontAtlasTexture = fontAtlas;
+
+		double x = 0.0;
+		double fsScale = 1.0 / (metrics.ascenderY - metrics.descenderY);
+		double y = 0.0;
+
+		const float spaceGlyphAdvance = fontGeometry.getGlyph(' ')->getAdvance();
 
 		glm::mat4 transform = glm::translate(glm::mat4(1.0f), pos)
 			* glm::scale(glm::mat4(1.0f), { size.x, size.y, 1.0f });
 
     for (size_t i = 0; i < text.size(); i++)
     {
-      char character = text[i];
-      if (character == '\r')
-        continue;
-      if (character == '\n')
-      {
-        x = 0;
-        y -= fsScale * metrics.lineHeight + lineHeightOffset;
-        continue;
-      }
-      auto glyph = fontGeometry.getGlyph(character);
-      if (!glyph)
-        glyph = fontGeometry.getGlyph('?');
-      if (!glyph)
-        return;
-      if (character == '\t')
-        glyph = fontGeometry.getGlyph(' ');
-      double al, ab, ar, at;
-      glyph->getQuadAtlasBounds(al, ab, ar, at);
-      glm::vec2 texCoordMin((float)al, (float)ab);
-      glm::vec2 texCoordMax((float)ar, (float)at);
-      double pl, pb, pr, pt;
-      glyph->getQuadPlaneBounds(pl, pb, pr, pt);
-      glm::vec2 quadMin((float)pl, (float)pb);
-      glm::vec2 quadMax((float)pr, (float)pt);
-      quadMin *= fsScale, quadMax *= fsScale;
-      quadMin += glm::vec2(x, y);
-      quadMax += glm::vec2(x, y);
-      float texelWidth = 1.0f / fontAtlas->GetWidth();
-      float texelHeight = 1.0f / fontAtlas->GetHeight();
-      texCoordMin *= glm::vec2(texelWidth, texelHeight);
-      texCoordMax *= glm::vec2(texelWidth, texelHeight);
+			char character = text[i];
+			if (character == '\r')
+				continue;
+
+			if (character == '\n')
+			{
+				x = 0;
+				y -= fsScale * metrics.lineHeight + 0;
+				continue;
+			}
+
+			if (character == ' ')
+			{
+				float advance = spaceGlyphAdvance;
+				if (i < text.size() - 1)
+				{
+					char nextCharacter = text[i + 1];
+					double dAdvance;
+					fontGeometry.getAdvance(dAdvance, character, nextCharacter);
+					advance = (float)dAdvance;
+				}
+
+				x += fsScale * advance + 0;
+				continue;
+			}
+
+			if (character == '\t')
+			{
+				// NOTE(Yan): is this right?
+				x += 4.0f * (fsScale * spaceGlyphAdvance + 0);
+				continue;
+			}
+
+			auto glyph = fontGeometry.getGlyph(character);
+			if (!glyph)
+				glyph = fontGeometry.getGlyph('?');
+			if (!glyph)
+				return;
+
+			double al, ab, ar, at;
+			glyph->getQuadAtlasBounds(al, ab, ar, at);
+			glm::vec2 texCoordMin((float)al, (float)ab);
+			glm::vec2 texCoordMax((float)ar, (float)at);
+
+			double pl, pb, pr, pt;
+			glyph->getQuadPlaneBounds(pl, pb, pr, pt);
+			glm::vec2 quadMin((float)pl, (float)pb);
+			glm::vec2 quadMax((float)pr, (float)pt);
+
+			quadMin *= fsScale, quadMax *= fsScale;
+			quadMin += glm::vec2(x, y);
+			quadMax += glm::vec2(x, y);
+
+			float texelWidth = 1.0f / fontAtlas->GetWidth();
+			float texelHeight = 1.0f / fontAtlas->GetHeight();
+			texCoordMin *= glm::vec2(texelWidth, texelHeight);
+			texCoordMax *= glm::vec2(texelWidth, texelHeight);
+
       
       // render here
       data.text_vertex_ptr->position = transform * glm::vec4(quadMin, 0.0f, 1.0f);
@@ -497,21 +527,21 @@ namespace Banana
       data.text_vertex_ptr->projID = proj;
       data.text_vertex_ptr++;
 
-      data.text_vertex_ptr->position = transform * glm::vec4(quadMin.x, quadMax.y, 0.0f, 1.0f);
+      data.text_vertex_ptr->position = transform * glm::vec4(quadMax.x, 0.0f, 0.0f, 1.0f);
       data.text_vertex_ptr->color = color;
-      data.text_vertex_ptr->tex_coords = { texCoordMin.x, texCoordMax.y };
+      data.text_vertex_ptr->tex_coords = { texCoordMax.x, texCoordMin.y};  
+      data.text_vertex_ptr->projID = proj;
+      data.text_vertex_ptr++;
+
+      data.text_vertex_ptr->position = transform * glm::vec4(quadMin.x, quadMax.y, 0.0, 1.0f);
+      data.text_vertex_ptr->color = color;
+      data.text_vertex_ptr->tex_coords = { texCoordMin.x, texCoordMax.y }; 
       data.text_vertex_ptr->projID = proj;
       data.text_vertex_ptr++;
 
       data.text_vertex_ptr->position = transform * glm::vec4(quadMax, 0.0f, 1.0f);
       data.text_vertex_ptr->color = color;
       data.text_vertex_ptr->tex_coords = texCoordMax;
-      data.text_vertex_ptr->projID = proj;
-      data.text_vertex_ptr++;
-
-      data.text_vertex_ptr->position = transform * glm::vec4(quadMax.x, quadMin.y, 0.0f, 1.0f);
-      data.text_vertex_ptr->color = color;
-      data.text_vertex_ptr->tex_coords = { texCoordMax.x, texCoordMin.y };
       data.text_vertex_ptr->projID = proj;
       data.text_vertex_ptr++;
 
