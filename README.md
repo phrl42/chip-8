@@ -1,30 +1,12 @@
-# Banana Game Engine
+# chip-8 interpreter
 
-This is an experimental game engine which I personally use to learn about graphics and game development
+read the title, that's what it is. a masochist way of learning low level systems
 
-I have been inspired by <a href="https://github.com/TheCherno/Hazel">Cherno</a> in terms of abstraction.
+# Resources:
 
-# To Do:
-
-- [x] input system
-
-- [x] get an infrastructure to work
-
-- [x] implement batch renderer
-
-- [x] sound system
-
-- [x] text rendering
-
-- [ ] add debugging stuff to imgui
-
-- [ ] optimize Renderer2D
-
-- [ ] circle renderer
-
-- [ ] line renderer
-
-- [x] have fun
+<a href="https://en.wikipedia.org/wiki/CHIP-8">Wikipedia</a>
+<a href="https://tobiasvl.github.io/blog/write-a-chip-8-emulator/">some blog</a>
+<a href="http://devernay.free.fr/hacks/chip8/C8TECH10.HTM#2.0">Technical Reference</a>
 
 # Instructions
 
