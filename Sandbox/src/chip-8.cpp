@@ -2,7 +2,7 @@
 
 namespace CHIP8
 {
-  void Init_Spec(Spec& spec)
+  void Load_Font(Spec &spec)
   {
     // put font into memory
 
@@ -118,8 +118,30 @@ namespace CHIP8
     spec.ram[78] = 0x80;
     spec.ram[79] = 0x80;
 
-    
   }
 
+  bool Load_Rom(Spec &spec, const char* rom_path)
+  {
+    std::ifstream file(rom_path);
+
+    // properly load byte by byte?
+ 
+  }
+
+  void Init_Chip8(Spec &spec, const char* rom_path)
+  {
+    const uint32_t entry = 0x200; // chip8 starts loading roms at 0x200
+
+    Load_Font(spec);
+
+    if(!Load_Rom(spec, rom_path))
+    {
+      LOG("Could not load rom at: " + std::to_string(rom_path));
+    }
+    
+    spec->state = State::RUN;
+    spec->PC = entry; // set Program Counter to entry
+    spec->rom = rom_path;
+  }
   
 };
