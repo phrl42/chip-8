@@ -108,6 +108,9 @@ namespace Banana
 
     double begin_time = 0.0f;
     double dt = 0.1f;
+
+    window->SetVSync(1);
+    
     while(running)
     {
       begin_time = window->GetTime();

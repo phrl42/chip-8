@@ -17,8 +17,8 @@ namespace SANDBOX
     ent.transform.proj = Banana::Projection::NONE;
 
     //ent.AddComponent(new Banana::QuadComponent("assets/textures/banana.png"));
-    ent.AddComponent(new Banana::TextComponent("autistic double"));
-    b_sound.Start();
+    //ent.AddComponent(new Banana::TextComponent("autistic double"));
+    // b_sound.Start();
 
     CHIP8::Init_Spec(spec, "assets/roms/PONG");
   }
@@ -62,7 +62,7 @@ namespace SANDBOX
     
     if(Banana::Input::IsKeyPressed(KEY_J))
     {
-      sound.Start();
+      //sound.Start();
       //Banana::TextComponent* texcomp = (Banana::TextComponent*)ent.GetComponent("TextComponent");
       //texcomp->ChangeText("salad bomb");
     }

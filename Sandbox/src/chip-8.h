@@ -21,7 +21,6 @@ namespace CHIP8
 
     uint8_t I;             // Index register
     uint16_t PC;           // Program Counter
-    uint16_t AR[12];       // Subroutine stack
 
     uint8_t delay_timer;   // Decrements at 60hz > 0
     uint8_t sound_timer;   // Decrements at 60hz > 0 and plays sound
@@ -36,7 +35,7 @@ namespace CHIP8
     std::array<bool, 64> display_x;
     std::array<bool, 32> display_y;
 
-    std::stack<uint16_t*> stack;
+    std::stack<uint16_t*> stack; // Subroutine stack
   };
 
   void Load_Font(Spec &spec);

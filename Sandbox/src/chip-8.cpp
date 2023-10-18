@@ -1,4 +1,5 @@
 #include "chip-8.h"
+#include <cstring>
 
 namespace CHIP8
 {
@@ -117,6 +118,8 @@ namespace CHIP8
     spec.ram[77] = 0xF0;
     spec.ram[78] = 0x80;
     spec.ram[79] = 0x80;
+
+    CHIP8_LOG("Loaded custom font");
   }
 
   bool Load_Rom(Spec &spec, const char* rom_path)
@@ -143,8 +146,13 @@ namespace CHIP8
 
   void Init_Spec(Spec &spec, const char* rom_path)
   {
+    // zero all arrays
+    memset(spec.ram, 0, sizeof(spec.ram) / sizeof(spec.ram[0]));
+    memset(spec.key, 0, sizeof(spec.key) / sizeof(spec.key[0]));
+    memset(spec.registers, 0, sizeof(spec.registers) / sizeof(spec.registers[0]));
+
     Load_Font(spec);
-    CHIP8_LOG("Loaded custom fonts");
+    
     if(!Load_Rom(spec, rom_path))
     {
       CHIP8_LOG("Could not load ROM at: " + std::string(rom_path));
@@ -156,6 +164,118 @@ namespace CHIP8
     spec.state = State::RUN;
     spec.PC = entry; // set Program Counter to entry
     spec.rom = rom_path;
+  }
+
+  void Validate_Opcode(Spec &spec)
+  {
+    uint16_t opcode = spec.ram[spec.PC];
+    uint16_t prefix = opcode >> 12;
+    switch(prefix)
+    {
+
+    case 0:
+    {
+      // clear screen
+      if(opcode == 0x00E0)
+      {
+	
+      }
+
+      // return from subroutine
+      if(opcode == 0x00EE)
+      {
+	
+      }
+      break;
+    }
+
+    case 1:
+    {
+      // jump to address NNN
+      //uint16_t address = opcode & (~(prefix << 12));
+      break;
+    }
+
+    case 2:
+    {
+      break;
+    }
+
+    case 3:
+    {
+      break;
+    }
+
+    case 4:
+    {
+      break;
+    }
+
+    case 5:
+    {
+      break;
+    }
+    
+    case 6:
+    {
+      break;
+    }
+    case 7:
+    {
+      break;
+    }
+
+    case 8:
+    {
+      break;
+    }
+
+    case 9:
+    {
+      break;
+    }
+
+    case 10:
+    {
+      break;
+    }
+
+    case 11:
+    {
+      break;
+    }
+
+    case 12:
+    {
+      break;
+    }
+
+    case 13:
+    {
+      break;
+    }
+
+    case 14:
+    {
+      break;
+    }
+
+    case 15:
+    {
+      break;
+    }
+    
+    default:
+      CHIP8_LOG("Instruction '" + std::string(std::hex << prefix) + "' unknown.");
+      break;
+    }
+  }
+  
+  void Update(Spec &spec)
+  {
+    Validate_Opcode(spec);
+
+    spec.PC++;
   }
   
 };
