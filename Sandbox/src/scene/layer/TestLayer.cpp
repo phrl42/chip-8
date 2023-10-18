@@ -19,6 +19,8 @@ namespace SANDBOX
     //ent.AddComponent(new Banana::QuadComponent("assets/textures/banana.png"));
     ent.AddComponent(new Banana::TextComponent("autistic double"));
     b_sound.Start();
+
+    CHIP8::Init_Spec(spec, "assets/roms/PONG");
   }
 
   TestLayer::~TestLayer()

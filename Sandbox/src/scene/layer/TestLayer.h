@@ -3,6 +3,7 @@
 #include "Banana.h"
 #include "renderer/Texture.h"
 #include "generic/Sound.h"
+#include "chip-8.h"
 
 namespace SANDBOX
 {
@@ -26,6 +27,7 @@ namespace SANDBOX
     Banana::Entity ent;
     Banana::Sound sound;
     Banana::Sound b_sound;
+    CHIP8::Spec spec;
   };
 
 };

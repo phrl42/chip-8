@@ -117,31 +117,45 @@ namespace CHIP8
     spec.ram[77] = 0xF0;
     spec.ram[78] = 0x80;
     spec.ram[79] = 0x80;
-
   }
 
   bool Load_Rom(Spec &spec, const char* rom_path)
   {
     std::ifstream file(rom_path);
 
-    // properly load byte by byte?
- 
+    int length = 0;
+    file.seekg(0, file.end);
+    length = file.tellg();
+    file.seekg(0, file.beg);
+      
+    // put all 4096 bytes into ram
+    file.read((char*)(spec.ram + entry), length);
+    CHIP8_LOG("Loaded " + std::to_string(length) + " bytes.");
+
+    if(!file)
+    {
+      file.close();
+      return false;
+    }
+    file.close();
+    return true;
   }
 
-  void Init_Chip8(Spec &spec, const char* rom_path)
+  void Init_Spec(Spec &spec, const char* rom_path)
   {
-    const uint32_t entry = 0x200; // chip8 starts loading roms at 0x200
-
     Load_Font(spec);
-
+    CHIP8_LOG("Loaded custom fonts");
     if(!Load_Rom(spec, rom_path))
     {
-      LOG("Could not load rom at: " + std::to_string(rom_path));
+      CHIP8_LOG("Could not load ROM at: " + std::string(rom_path));
+      return;
     }
     
-    spec->state = State::RUN;
-    spec->PC = entry; // set Program Counter to entry
-    spec->rom = rom_path;
+    CHIP8_LOG("Loaded ROM '" + std::string(rom_path) + "'");
+    
+    spec.state = State::RUN;
+    spec.PC = entry; // set Program Counter to entry
+    spec.rom = rom_path;
   }
   
 };
