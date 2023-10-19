@@ -19,7 +19,7 @@ namespace CHIP8
 
     uint8_t ram[4096];     // Emulate chip-8 original ram size
 
-    uint8_t I;             // Index register
+    uint16_t I;             // Index register
     uint16_t PC;           // Program Counter
 
     uint8_t delay_timer;   // Decrements at 60hz > 0
@@ -32,14 +32,15 @@ namespace CHIP8
     const char *rom;             // Running rom
 
     // screen values
-    std::array<bool, 64> display_x;
-    std::array<bool, 32> display_y;
+    bool display[32][64];
 
     std::stack<uint16_t*> stack; // Subroutine stack
   };
 
   void Load_Font(Spec &spec);
   bool Load_Rom(Spec &spec, const char* rom_path);
+
+  uint16_t Get_Value_N(uint16_t opcode, uint8_t n);
   
   void Init_Spec(Spec &spec, const char* rom_path);
 

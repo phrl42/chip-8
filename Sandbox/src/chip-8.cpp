@@ -1,5 +1,6 @@
 #include "chip-8.h"
 #include <cstring>
+#include <sstream>
 
 namespace CHIP8
 {
@@ -145,9 +146,17 @@ namespace CHIP8
   }
 
 
-  void Get_N_Bits(uint16_t opcode, uint8_t n)
+  uint16_t Get_Value_N(uint16_t opcode, uint8_t n)
   {
+    if(n > 3)
+    {
+      CHIP8_LOG("Cannot get " + std::to_string(n) + ". Opcode is 16-bit only: 0-3 MAX");
+      return 0;
+    }
+    opcode = opcode << (n * 4);
+    opcode = opcode >> 12;
 
+    return opcode;
   }
   
   void Init_Spec(Spec &spec, const char* rom_path)
@@ -222,6 +231,7 @@ namespace CHIP8
 
     case 3:
     {
+      // skips next instruction if VX is NN
       uint16_t index = opcode;
       index = index << 4;
       index = index >> 12;
@@ -239,15 +249,16 @@ namespace CHIP8
 
     case 4:
     {
-      uint16_t index = opcode;
-      index = index << 4;
-      index = index >> 12;
+      // skips next instruction if VX is not NN
+      uint16_t index_X = Get_Value_N(opcode, 1);
+      //index_X = index_X << 4;
+      //index_X = index_X >> 12;
 
       uint16_t value = opcode;
       value = value << 8;
       value = value >> 8;
 
-      if(spec.registers[index] != value)
+      if(spec.registers[index_X] != value)
       {
 	spec.PC++;
       }
@@ -256,13 +267,14 @@ namespace CHIP8
 
     case 5:
     {
-      uint16_t index_X = opcode;
-      index_X = index_X << 4;
-      index_X = index_X >> 12;
+      // skips next instruction if VX is VY
+      uint16_t index_X = Get_Value_N(opcode, 1);
+      //index_X = index_X << 4;
+      //index_X = index_X >> 12;
 
-      uint16_t index_Y = opcode;
-      index_Y = index_Y << 8;
-      index_Y = index_Y >> 12;
+      uint16_t index_Y = Get_Value_N(opcode, 2);
+      //index_Y = index_Y << 8;
+      //index_Y = index_Y >> 12;
       
       if(spec.registers[index_X] == spec.registers[index_Y])
       {
@@ -274,25 +286,134 @@ namespace CHIP8
     
     case 6:
     {
+      // set VX to NN
+      uint16_t index_X = Get_Value_N(opcode, 1);
+      //index_X = index_X << 4;
+      //index_X = index_X >> 12;
+
+      uint16_t value = opcode;
+      value = value << 8;
+      value = value >> 8;
+
+      spec.registers[index_X] = value;
       break;
     }
     case 7:
     {
+      // add NN to VX
+      uint16_t index_X = Get_Value_N(opcode, 1);
+      //index_X = index_X << 4;
+      //index_X = index_X >> 12;
+
+      uint16_t value = opcode;
+      value = value << 8;
+      value = value >> 8;
+
+      spec.registers[index_X] += value;
       break;
     }
 
     case 8:
     {
-      break;
-    }
+      // operations
+      uint16_t operation = Get_Value_N(opcode, 3);
+      uint16_t index_X = Get_Value_N(opcode, 1);
+      uint16_t index_Y = Get_Value_N(opcode, 2);
+      switch(operation)
+      {
+	// VX = VY
+      case 0:
+      {
+	spec.registers[index_X] = spec.registers[index_Y];
+	break;
+      }
 
+      // bitwise OR
+      case 1:
+      {
+	spec.registers[index_X] |= spec.registers[index_Y];
+	break;
+      }
+
+      // bitwise AND
+      case 2:
+      {
+	spec.registers[index_X] &= spec.registers[index_Y];
+	break;
+      }
+
+      // bitwise XOR
+      case 3:
+      {
+	spec.registers[index_X] ^= spec.registers[index_Y];
+	break;
+      }
+      
+      // add
+      case 4:
+      {
+	spec.registers[index_X] += spec.registers[index_Y];
+	break;
+      }
+
+      // subtract
+      case 5:
+      {
+	spec.registers[index_X] -= spec.registers[index_Y];
+	break;
+      }
+
+      // store lsb at VF and rshift VX by 1
+      case 6:
+      {
+	uint16_t lsb_vx = spec.registers[index_X];
+	lsb_vx = lsb_vx << 15;
+	lsb_vx = lsb_vx >> 15;
+	spec.registers[15] = lsb_vx;
+
+	spec.registers[index_X] >>= 1;
+	break;
+      }
+
+      // VX = VY - VX
+      case 7:
+      {
+	spec.registers[index_X] = spec.registers[index_Y] - spec.registers[index_X];
+	break;
+      }
+
+      // inverse instruction of 6: store msb at VF and lshift VX by 1 
+      case 14:
+      {
+	uint16_t msb_vx = spec.registers[index_X];
+	msb_vx = msb_vx >> 15;
+	spec.registers[15] = msb_vx;
+
+	spec.registers[index_X] <<= 1;
+	break;
+      }
+    
+      default:
+      {
+	std::ostringstream stream;
+	stream << std::hex << opcode;
+	CHIP8_LOG("Could not fetch operation opcode: '" + stream.str() + "");
+	break;
+      }
+      }
+    }
     case 9:
-    {
+    { 
       break;
     }
 
+    // set I (Index Register) to NNN
     case 10:
     {
+      uint16_t val = opcode;
+      val = val << 4;
+      val = val >> 4;
+      spec.I = val;
       break;
     }
 
@@ -310,9 +431,15 @@ namespace CHIP8
     {
       break;
     }
-
+    
+    // draw at X, Y with value N
     case 14:
     {
+      uint16_t pos_x = Get_Value_N(opcode, 1);
+      uint16_t pos_y = Get_Value_N(opcode, 2);
+      uint16_t n = Get_Value_N(opcode, 3);
+
+      spec.display
       break;
     }
 
@@ -322,8 +449,12 @@ namespace CHIP8
     }
     
     default:
-      CHIP8_LOG("Instruction '" + std::string(std::hex << prefix) + "' unknown.");
+    {
+      std::ostringstream stream;
+      stream << std::hex << opcode;
+      CHIP8_LOG("Instruction '" + stream.str() + "' unknown.");
       break;
+    }
     }
   }
   
