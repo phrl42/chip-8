@@ -144,6 +144,12 @@ namespace CHIP8
     return true;
   }
 
+
+  void Get_N_Bits(uint16_t opcode, uint8_t n)
+  {
+
+  }
+  
   void Init_Spec(Spec &spec, const char* rom_path)
   {
     // zero all arrays
@@ -192,27 +198,77 @@ namespace CHIP8
     case 1:
     {
       // jump to address NNN
-      //uint16_t address = opcode & (~(prefix << 12));
+      uint16_t address = opcode;
+
+      address = address << 4;
+      address = address >> 4;
+
+      spec.PC = address;
       break;
     }
 
     case 2:
     {
+      // call to subroutine at NNN
+      // how would you call a subroutine? just go to the address or what?
+      uint16_t address = opcode;
+
+      address = address << 4;
+      address = address >> 4;
+
+      spec.PC = address;
       break;
     }
 
     case 3:
     {
+      uint16_t index = opcode;
+      index = index << 4;
+      index = index >> 12;
+
+      uint16_t value = opcode;
+      value = value << 8;
+      value = value >> 8;
+      // side note: lol, so every chip-8's if statement content is a subroutine, so you can easily skip it 
+      if(spec.registers[index] == value)
+      {
+	spec.PC++;
+      }
       break;
     }
 
     case 4:
     {
+      uint16_t index = opcode;
+      index = index << 4;
+      index = index >> 12;
+
+      uint16_t value = opcode;
+      value = value << 8;
+      value = value >> 8;
+
+      if(spec.registers[index] != value)
+      {
+	spec.PC++;
+      }
       break;
     }
 
     case 5:
     {
+      uint16_t index_X = opcode;
+      index_X = index_X << 4;
+      index_X = index_X >> 12;
+
+      uint16_t index_Y = opcode;
+      index_Y = index_Y << 8;
+      index_Y = index_Y >> 12;
+      
+      if(spec.registers[index_X] == spec.registers[index_Y])
+      {
+	spec.PC++;
+      }
+
       break;
     }
     
