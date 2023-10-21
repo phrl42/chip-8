@@ -439,7 +439,7 @@ namespace CHIP8
       uint16_t pos_y = Get_Value_N(opcode, 2);
       uint16_t n = Get_Value_N(opcode, 3);
 
-      //spec.display
+      spec.display[pos_y][pos_x] = n;
       break;
     }
 

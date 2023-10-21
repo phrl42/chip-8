@@ -44,4 +44,7 @@ namespace CHIP8
   
   void Init_Spec(Spec &spec, const char* rom_path);
 
+  void Validate_Opcode(Spec &spec);
+  void Update(Spec &spec);
+  
 };

@@ -8,19 +8,9 @@
 namespace SANDBOX
 {
   TestLayer::TestLayer(const std::string& name)
-  : name(name), sound(Banana::Sound("assets/sounds/test.wav")), b_sound(Banana::Sound("assets/sounds/menu.wav", true))
+  : name(name)
   {
-    ent.transform.pos = {-1, 0, 0};
-    ent.transform.size = {0.2, 0.2, 0};
-    //ent.transform.color = {1, 0.5, -1.0f, 1.0f};
-    ent.transform.color = {1.0f, 1.0f, 1.0f, 1.0f};
-    ent.transform.proj = Banana::Projection::NONE;
-
-    //ent.AddComponent(new Banana::QuadComponent("assets/textures/banana.png"));
-    //ent.AddComponent(new Banana::TextComponent("autistic double"));
-    // b_sound.Start();
-
-    CHIP8::Init_Spec(spec, "assets/roms/PONG");
+    CHIP8::Init_Spec(spec, "assets/roms/TEST");
   }
 
   TestLayer::~TestLayer()
@@ -30,7 +20,13 @@ namespace SANDBOX
 
   void TestLayer::OnAttach()
   {
-
+    for(size_t y = 0; y < 32; y++)
+    {
+      for(size_t x = 0; x < 64; x++)
+      {
+	ent[y][x].AddComponent(new Banana::QuadComponent());
+      }
+    }
   }
 
   void TestLayer::OnDetach()
@@ -48,27 +44,26 @@ namespace SANDBOX
   {
     if(Banana::Input::IsKeyPressed(KEY_Y))
     {
-      ent.transform.size.y += 2 * dt;
     }
     if(Banana::Input::IsKeyPressed(KEY_Z))
     {
-      ent.transform.size.x += 2 * dt;
     }
 
-    if(Banana::Input::IsKeyPressed(KEY_N))
+    float one_width = 2.0f / 64;
+    float one_height = 2.0f / 32;
+    for(size_t y = 0; y < 32; y++)
     {
-    
+      for(size_t x = 0; x < 64; x++)
+      {
+	ent[y][x].transform.proj = Banana::Projection::NONE;
+	ent[y][x].transform.pos = {(x * one_width) - 1, (y * one_height) - 1, 0};
+	ent[y][x].transform.size = {one_width, one_height, 0};
+	ent[y][x].transform.color = {spec.display[y][x], spec.display[y][x], spec.display[y][x], spec.display[y][x]};
+	ent[y][x].Render(dt);
+      }
     }
     
-    if(Banana::Input::IsKeyPressed(KEY_J))
-    {
-      //sound.Start();
-      //Banana::TextComponent* texcomp = (Banana::TextComponent*)ent.GetComponent("TextComponent");
-      //texcomp->ChangeText("salad bomb");
-    }
+    CHIP8::Update(spec);
 
-    //ent.transform.rotation += 90 * dt;
-    //ent.transform.rotation += 90 * dt;
-    ent.Render(dt);
   }
 };
