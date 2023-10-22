@@ -152,6 +152,17 @@ namespace CHIP8
     return true;
   }
 
+  uint16_t Combine(uint8_t first, uint8_t second)
+  {
+    uint16_t first_16 = (uint16_t) first; 
+    uint16_t second_16 = (uint16_t) second;
+
+    first_16 = first_16 << 8;
+
+    uint16_t val = first_16 | second_16;
+
+    return val;
+  }
 
   uint16_t Get_Value_N(uint16_t opcode, uint8_t n)
   {
@@ -173,14 +184,6 @@ namespace CHIP8
     memset(spec->key, 0, sizeof(spec->key) / sizeof(spec->key[0]));
     memset(spec->registers, 0, sizeof(spec->registers) / sizeof(spec->registers[0]));
 
-    for(size_t y = 0; y < 32; y++)
-    {
-      for(size_t x = 0; x < 64; x++)
-      {
-	spec->display[y][x] = 0;
-      }
-    }
-    std::cout << "[" << spec << "]" << std::endl;
     Load_Font(spec);
 
     if(!Load_Rom(spec, rom_path))
@@ -197,9 +200,9 @@ namespace CHIP8
 
   void Validate_Opcode(Spec *spec)
   {
-    uint16_t opcode = spec->ram[spec->PC];
+    uint16_t opcode = Combine(spec->ram[spec->PC], spec->ram[spec->PC+1]);
     uint16_t prefix = opcode >> 12;
-    std::cout << "[" << std::to_string(spec->PC) << "] " << std::to_string(prefix) << std::endl;
+    std::cout << "[" << std::hex << spec->PC << "] " << std::hex << opcode << "(" << std::to_string(prefix) << ")"<< std::endl;
     switch(prefix)
     {
 
@@ -208,13 +211,6 @@ namespace CHIP8
       // clear screen
       if(opcode == 0x00E0)
       {
-	for(size_t y = 0; y < 32; y++)
-	{
-	  for(size_t x = 0; x < 64; x++)
-	  {
-	    spec->display[y][x] = 0;
-	  }
-	}
       }
 
       // return from subroutine
@@ -233,7 +229,7 @@ namespace CHIP8
       address = address << 4;
       address = address >> 4;
 
-      spec->PC = address;
+      spec->PC = address - 2;
       break;
     }
 
@@ -246,7 +242,7 @@ namespace CHIP8
       address = address << 4;
       address = address >> 4;
 
-      spec->PC = address;
+      spec->PC = address - 2;
       break;
     }
 
@@ -263,7 +259,7 @@ namespace CHIP8
       // side note: lol, so every chip-8's if statement content is a subroutine, so you can easily skip it 
       if(spec->registers[index] == value)
       {
-	spec->PC++;
+	spec->PC += 2;
       }
       break;
     }
@@ -281,7 +277,7 @@ namespace CHIP8
 
       if(spec->registers[index_X] != value)
       {
-	spec->PC++;
+	spec->PC += 2;
       }
       break;
     }
@@ -299,7 +295,7 @@ namespace CHIP8
       
       if(spec->registers[index_X] == spec->registers[index_Y])
       {
-	spec->PC++;
+	spec->PC += 2;
       }
 
       break;
@@ -404,7 +400,7 @@ namespace CHIP8
       }
 
       // inverse instruction of 6: store msb at VF and lshift VX by 1 
-      case 14:
+      case E:
       {
 	uint16_t msb_vx = spec->registers[index_X];
 	msb_vx = msb_vx >> 15;
@@ -418,7 +414,7 @@ namespace CHIP8
       {
 	std::ostringstream stream;
 	stream << std::hex << opcode;
-	CHIP8_LOG("Could not fetch operation opcode: '" + stream.str() + "");
+	CHIP8_LOG("Instruction '" + stream.str() + "' unknown.");
 	break;
       }
       }
@@ -429,7 +425,7 @@ namespace CHIP8
     }
 
     // set I (Index Register) to NNN
-    case 10:
+    case A:
     {
       uint16_t val = opcode;
       val = val << 4;
@@ -438,33 +434,45 @@ namespace CHIP8
       break;
     }
 
-    case 11:
+    case B:
     {
       break;
     }
 
-    case 12:
+    case C:
     {
       break;
     }
 
-    case 13:
+    // DXYN
+    // draw at (VX, VY) with (8, N) 
+    case D:
     {
+      uint16_t x = spec->registers[Get_Value_N(opcode, 1)];
+      uint16_t y = spec->registers[Get_Value_N(opcode, 2)];
+      uint16_t n = Get_Value_N(opcode, 3);
+      bool unset = false;
+
+      for(uint16_t y = spec->I; y < n; y++)
+      {
+	for(uint8_t x = 0; x < 8; x++)
+	{
+	  if(spec->ram[y]) unset = true;
+	  spec->ram[y] ^= spec->ram[y];
+	}
+      }
+
+      spec->registers[15] = unset;
+
       break;
     }
     
-    // draw at X, Y with value N
-    case 14:
+    case E:
     {
-      uint16_t pos_x = Get_Value_N(opcode, 1);
-      uint16_t pos_y = Get_Value_N(opcode, 2);
-      uint16_t n = Get_Value_N(opcode, 3);
-
-      spec->display[pos_y][pos_x] = n;
       break;
     }
 
-    case 15:
+    case F:
     {
       break;
     }
@@ -477,14 +485,12 @@ namespace CHIP8
       break;
     }
     }
+    spec->PC += 2;
   }
   
   void Update(Spec *spec)
   {
-    std::cout << "[" << spec << "]" << std::endl;
     Validate_Opcode(spec);
-
-    spec->PC++;
   }
   
 };
