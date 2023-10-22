@@ -37,14 +37,14 @@ namespace CHIP8
     std::stack<uint16_t*> stack; // Subroutine stack
   };
 
-  void Load_Font(Spec &spec);
-  bool Load_Rom(Spec &spec, const char* rom_path);
+  void Load_Font(Spec *spec);
+  bool Load_Rom(Spec *spec, const char* rom_path);
 
   uint16_t Get_Value_N(uint16_t opcode, uint8_t n);
   
-  void Init_Spec(Spec &spec, const char* rom_path);
+  void Init_Spec(Spec *spec, const char* rom_path);
 
-  void Validate_Opcode(Spec &spec);
-  void Update(Spec &spec);
+  void Validate_Opcode(Spec *spec);
+  void Update(Spec *spec);
   
 };

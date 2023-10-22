@@ -7,10 +7,12 @@
 
 namespace SANDBOX
 {
+
+  std::ofstream file;
   TestLayer::TestLayer(const std::string& name)
   : name(name)
   {
-    CHIP8::Init_Spec(spec, "assets/roms/TEST");
+    CHIP8::Init_Spec(&spec, "assets/roms/TEST");
   }
 
   TestLayer::~TestLayer()
@@ -31,7 +33,6 @@ namespace SANDBOX
 
   void TestLayer::OnDetach()
   {
-
   }
 
 
@@ -42,6 +43,7 @@ namespace SANDBOX
 
   void TestLayer::OnUpdate(float dt)
   {
+
     if(Banana::Input::IsKeyPressed(KEY_Y))
     {
     }
@@ -56,14 +58,14 @@ namespace SANDBOX
       for(size_t x = 0; x < 64; x++)
       {
 	ent[y][x].transform.proj = Banana::Projection::NONE;
-	ent[y][x].transform.pos = {(x * one_width) - 1, (y * one_height) - 1, 0};
+	ent[y][x].transform.pos = {(x * one_width) - 1, (((y * one_height) * -1) + 1) - one_height, 0};
 	ent[y][x].transform.size = {one_width, one_height, 0};
-	ent[y][x].transform.color = {spec.display[y][x], spec.display[y][x], spec.display[y][x], spec.display[y][x]};
+	ent[y][x].transform.color = {spec.display[y][x], spec.display[y][x], spec.display[y][x], 1};
 	ent[y][x].Render(dt);
       }
     }
     
-    CHIP8::Update(spec);
+    CHIP8::Update(&spec);
 
   }
 };
