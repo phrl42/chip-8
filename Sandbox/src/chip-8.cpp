@@ -231,7 +231,8 @@ namespace CHIP8
       // return from subroutine
       if(opcode == 0x00EE)
       {
-	
+	spec->PC = spec->stack.top();
+	spec->stack.pop();
       }
       break;
     }
@@ -251,11 +252,14 @@ namespace CHIP8
     case 2:
     {
       // call to subroutine at NNN
-      // how would you call a subroutine? just go to the address or what?
+      // and save current address in stack
+      // so it can be used when returning from subroutine
       uint16_t address = opcode;
 
       address = address << 4;
       address = address >> 4;
+
+      spec->stack.push(spec->PC);
 
       spec->PC = address - 2;
       break;
