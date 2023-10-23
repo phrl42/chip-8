@@ -42,7 +42,7 @@ namespace CHIP8
     // read sprites from I and save them here
     bool display[32][64];
 
-    std::stack<uint16_t*> stack; // Subroutine stack
+    std::stack<uint16_t> stack; // Subroutine stack
   };
 
   void Load_Font(Spec *spec);
