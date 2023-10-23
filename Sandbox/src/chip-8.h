@@ -46,6 +46,8 @@ namespace CHIP8
   };
 
   void Load_Font(Spec *spec);
+  uint16_t Character_Address(uint8_t ch);
+
   bool Load_Rom(Spec *spec, const char* rom_path);
 
   uint16_t Combine(uint8_t first, uint8_t second);

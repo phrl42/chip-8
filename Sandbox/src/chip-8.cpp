@@ -1,6 +1,7 @@
 #include "chip-8.h"
 #include <cstring>
 #include <sstream>
+#include <cstdlib>
 
 namespace CHIP8
 {
@@ -123,6 +124,11 @@ namespace CHIP8
     CHIP8_LOG("Loaded custom font");
   }
 
+  uint16_t Character_Address(uint8_t ch)
+  {
+    return ch * 5;
+  }
+  
   bool Load_Rom(Spec *spec, const char* rom_path)
   {
     std::ifstream file(rom_path);
@@ -388,6 +394,17 @@ namespace CHIP8
       // add
       case 4:
       {
+	int val = spec->registers[index_X] + spec->registers[index_Y];
+
+	if(val > 255)
+	{
+	  spec->registers[15] = 1;
+	}
+	else
+	{
+	  spec->registers[15] = 0;
+	}
+	
 	spec->registers[index_X] += spec->registers[index_Y];
 	break;
       }
@@ -395,6 +412,14 @@ namespace CHIP8
       // subtract
       case 5:
       {
+	if(spec->registers[index_X] > spec->registers[index_Y])
+	{
+	  spec->registers[15] = 1;
+	}
+	else
+	{
+	  spec->registers[15] = 0;
+	}
 	spec->registers[index_X] -= spec->registers[index_Y];
 	break;
       }
@@ -453,13 +478,29 @@ namespace CHIP8
       break;
     }
 
+    // jump to address NNN plus V0
     case B:
     {
+      uint16_t address = opcode;
+      address <<= 4;
+      address >>= 4;
+
+      address += spec->registers[0];
+
+      spec->PC = address - 2;
       break;
     }
 
+    // set VX = NN & rand()
     case C:
     {
+      uint16_t index_X = Get_Value_N(opcode, 1);
+      uint8_t val = opcode;
+
+      val <<= 8;
+      val >>= 8;
+      
+      spec->registers[index_X] = val & std::rand();
       break;
     }
 
@@ -467,11 +508,13 @@ namespace CHIP8
     // draw at (VX, VY) with (8, N) 
     case D:
     {
-      uint16_t x = spec->registers[Get_Value_N(opcode, 1)];
-      uint16_t y = spec->registers[Get_Value_N(opcode, 2)];
+      uint16_t x = spec->registers[Get_Value_N(opcode, 1)] % 64;
+      uint16_t y = spec->registers[Get_Value_N(opcode, 2)] % 32;
       uint16_t n = Get_Value_N(opcode, 3);
-      bool collided = false;
 
+      spec->registers[15] = 0;
+
+      // modulo stands for wrapping
       for(uint16_t h = 0; h < n; h++)
       {
 	for(uint8_t w = 0; w < 8; w++)
@@ -479,22 +522,165 @@ namespace CHIP8
 	  uint8_t row = spec->ram[spec->I + h];
 	  row = row << w;
 	  row = row >> (7 - w);
-	  if(spec->display[y+h][x+w]) collided = true;
-	  spec->display[y+h][x+w] = row;
+	  
+	  if(spec->display[(y+h) % 32][(x+w) % 64] && row)
+	  {
+	    spec->registers[15] = 1;
+	  }
+
+	  spec->display[(y+h) % 32][(x+w) % 64] ^= row;
+	  
 	}
       }
-
-      spec->registers[15] = collided;
       break;
     }
-    
+
+    // key operations
     case E:
     {
+      uint16_t suffix = opcode;
+      uint16_t index_X = opcode;
+      
+      suffix = suffix << 12;
+      suffix = suffix >> 12;
+
+      index_X = index_X << 4;
+      index_X = index_X >> 12;
+      switch(suffix)
+      {
+	// skip instruction if key at VX is not pressed
+      case 1:
+      {
+	if(!spec->key[spec->registers[index_X]])
+	{
+	  spec->PC += 2;
+	}
+	break;
+      }
+      // skip instruction if key at VX is pressed
+      case E:
+      {
+	if(spec->key[spec->registers[index_X]])
+	{
+	  spec->PC += 2;
+	}
+	break;
+      }
+      default:
+	std::ostringstream stream;
+	stream << std::hex << opcode;
+	CHIP8_LOG("Instruction '" + stream.str() + "' unknown.");
+	break;
+      }
       break;
     }
 
     case F:
     {
+      uint16_t suffix = opcode;
+      uint16_t index_X = opcode;
+      suffix = suffix << 8;
+      suffix = suffix >> 8;
+
+      index_X = index_X << 4;
+      index_X = index_X >> 12;
+      switch(suffix)
+      {
+	// set VX = delay()
+      case 0x07:
+      {
+	spec->registers[index_X] = spec->delay_timer;
+	break;
+      }
+
+      // wait for any key press
+      case 0x0A:
+      {
+	int8_t sub = -2;
+	for(uint8_t i = 0; i <= F; i++)
+	{
+	  if(spec->key[i])
+	  {
+	    sub = 0;
+	  }
+	}
+	spec->PC += sub;
+	break;
+      }
+
+      // set delay timer to VX
+      case 0x15:
+      {
+	spec->delay_timer = spec->registers[index_X];
+	break;
+      }
+
+      // set sound timer to VX
+      case 0x18:
+      {
+	spec->sound_timer = spec->registers[index_X];
+	break;
+      }
+
+      // do I += VX
+      case 0x1E:
+      {
+	spec->I += spec->registers[index_X];
+	break;
+      }
+
+      // set I to sprite location of VX
+      case 0x29:
+      {
+	uint8_t ch = spec->registers[index_X];
+	spec->I = Character_Address(ch);
+	break;
+      }
+
+      // BCD autism
+      case 0x33:
+      {
+	// one could also do this with %
+	uint8_t val = spec->registers[index_X];
+
+	std::string bcd = std::to_string(val);
+
+	for(uint8_t i = 0; i < bcd.size(); i++)
+	{
+	  spec->ram[spec->I + i] = bcd[i];
+	}
+	
+	break;
+      }
+
+      // put registers to memory
+      case 0x55:
+      {
+	for(uint8_t i = 0; i <= index_X; i++)
+	{
+	  spec->ram[spec->I + i] = spec->registers[i];
+	}
+	break;
+      }
+
+      // put memory content into registers
+      case 0x65:
+      {
+	for(uint8_t i = 0; i <= index_X; i++)
+	{
+	  spec->registers[i] = spec->ram[spec->I + i];
+	}
+	break;
+      }
+
+      default:
+      {
+	std::ostringstream stream;
+	stream << std::hex << opcode;
+	CHIP8_LOG("Instruction '" + stream.str() + "' unknown.");
+	break;
+      }
+      }
       break;
     }
     
@@ -512,6 +698,16 @@ namespace CHIP8
   void Update(Spec *spec)
   {
     Validate_Opcode(spec);
+
+    if(spec->delay_timer)
+    {
+      spec->delay_timer--;
+    }
+
+    if(spec->sound_timer)
+    {
+      spec->sound_timer--;
+    }
   }
   
 };
