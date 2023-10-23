@@ -184,6 +184,14 @@ namespace CHIP8
     memset(spec->key, 0, sizeof(spec->key) / sizeof(spec->key[0]));
     memset(spec->registers, 0, sizeof(spec->registers) / sizeof(spec->registers[0]));
 
+    for(int y = 0; y < 32; y++)
+    {
+      for(int x = 0; x < 64; x++)
+      {
+	spec->display[y][x] = 0;
+      }
+    }
+
     Load_Font(spec);
 
     if(!Load_Rom(spec, rom_path))
@@ -211,6 +219,13 @@ namespace CHIP8
       // clear screen
       if(opcode == 0x00E0)
       {
+	for(int y = 0; y < 32; y++)
+	{
+	  for(int x = 0; x < 64; x++)
+	  {
+	    spec->display[y][x] = 0;
+	  }
+	}
       }
 
       // return from subroutine
@@ -451,19 +466,21 @@ namespace CHIP8
       uint16_t x = spec->registers[Get_Value_N(opcode, 1)];
       uint16_t y = spec->registers[Get_Value_N(opcode, 2)];
       uint16_t n = Get_Value_N(opcode, 3);
-      bool unset = false;
+      bool collided = false;
 
-      for(uint16_t y = spec->I; y < n; y++)
+      for(uint16_t h = 0; h < n; h++)
       {
-	for(uint8_t x = 0; x < 8; x++)
+	for(uint8_t w = 0; w < 8; w++)
 	{
-	  if(spec->ram[y]) unset = true;
-	  spec->ram[y] ^= spec->ram[y];
+	  uint8_t row = spec->ram[spec->I + h];
+	  row = row << w;
+	  row = row >> (7 - w);
+	  if(spec->display[y+h][x+w]) collided = true;
+	  spec->display[y+h][x+w] = row;
 	}
       }
 
-      spec->registers[15] = unset;
-
+      spec->registers[15] = collided;
       break;
     }
     

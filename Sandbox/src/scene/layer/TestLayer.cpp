@@ -12,7 +12,7 @@ namespace SANDBOX
   TestLayer::TestLayer(const std::string& name)
   : name(name)
   {
-    CHIP8::Init_Spec(&spec, "assets/roms/TEST");
+    CHIP8::Init_Spec(&spec, "assets/roms/IBM");
   }
 
   TestLayer::~TestLayer()

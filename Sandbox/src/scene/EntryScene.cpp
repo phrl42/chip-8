@@ -19,9 +19,9 @@ namespace SANDBOX
 
   void EntryScene::OnUpdate(float dt)
   {
-    static float x = 0;
-    static float y = 0;
-    static float z = -10;
+    static float x = 5;
+    static float y = -10;
+    static float z = 50;
     
     if(Banana::Input::IsKeyPressed(KEY_S))
     {

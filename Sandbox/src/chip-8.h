@@ -27,7 +27,7 @@ namespace CHIP8
 
     uint8_t ram[4096];     // Emulate chip-8 original ram size
 
-    uint16_t I;             // Index register
+    uint16_t I;             // Index register (used for sprites)
     uint16_t PC;           // Program Counter
 
     uint8_t delay_timer;   // Decrements at 60hz > 0
@@ -39,8 +39,8 @@ namespace CHIP8
 
     const char *rom;             // Running rom
 
-    // screen values are saved at 'I'
-    //bool display[32][64];
+    // read sprites from I and save them here
+    bool display[32][64];
 
     std::stack<uint16_t*> stack; // Subroutine stack
   };
