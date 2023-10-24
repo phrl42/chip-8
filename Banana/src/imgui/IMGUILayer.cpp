@@ -124,7 +124,7 @@ namespace Banana
     ImGui::Begin("Scene", nullptr, ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoDecoration);
     ImVec2 winsize = ImGui::GetWindowSize();
     
-    ImGui::Image((void*)Application::GetInstance().fb->GetColorAttachmentID(), {winsize.x, winsize.y - 42}, {0, 1}, {1, 0});
+    ImGui::Image((void*)Application::GetInstance().fb->GetColorAttachmentID(), {winsize.x - 10, winsize.y - 42}, {0, 1}, {1, 0});
     ImGui::End();
 
     ImGui::Render();

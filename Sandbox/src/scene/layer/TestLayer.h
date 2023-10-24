@@ -24,6 +24,7 @@ namespace SANDBOX
   
   private:
     std::string name;
+    Banana::Sound sound;
     Banana::Entity ent[32][64];
     CHIP8::Spec spec;
   };

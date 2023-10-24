@@ -216,7 +216,6 @@ namespace CHIP8
   {
     uint16_t opcode = Combine(spec->ram[spec->PC], spec->ram[spec->PC+1]);
     uint16_t prefix = opcode >> 12;
-    std::cout << "[" << std::hex << spec->PC << "] " << std::hex << opcode << "(" << std::to_string(prefix) << ")"<< std::endl;
     switch(prefix)
     {
 
@@ -644,14 +643,10 @@ namespace CHIP8
       {
 	// one could also do this with %
 	uint8_t val = spec->registers[index_X];
+	spec->ram[spec->I + 2] = val % 10;
+	spec->ram[spec->I + 1] = ((val % 100) - spec->ram[spec->I + 2]) / 10;
+	spec->ram[spec->I + 0] = val - (spec->ram[spec->I + 2] + spec->ram[spec->I + 1]) / 100;
 
-	std::string bcd = std::to_string(val);
-
-	for(uint8_t i = 0; i < bcd.size(); i++)
-	{
-	  spec->ram[spec->I + i] = bcd[i];
-	}
-	
 	break;
       }
 
@@ -699,16 +694,6 @@ namespace CHIP8
   
   void Update(Spec *spec)
   {
-    if(spec->delay_timer)
-    {
-      spec->delay_timer--;
-    }
-
-    if(spec->sound_timer)
-    {
-      spec->sound_timer--;
-    }
-    
     Validate_Opcode(spec);
   }
   

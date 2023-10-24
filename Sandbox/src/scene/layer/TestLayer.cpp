@@ -10,9 +10,9 @@ namespace SANDBOX
 
   std::ofstream file;
   TestLayer::TestLayer(const std::string& name)
-  : name(name)
+    : name(name), sound(Banana::Sound("assets/sounds/test.wav", false))
   {
-    CHIP8::Init_Spec(&spec, "assets/roms/PONG");
+    CHIP8::Init_Spec(&spec, "assets/roms/PONG2");
   }
 
   TestLayer::~TestLayer()
@@ -55,6 +55,28 @@ namespace SANDBOX
       spec.key[i % mod] = Banana::Input::IsKeyPressed(i); 
     }
 
+    if(spec.delay_timer)
+    {
+      spec.delay_timer -= 60 * dt * 10;
+    }
+
+    if(spec.sound_timer)
+    {
+      spec.sound_timer -= 60 * dt * 10;
+    }
+
+    static bool started = false;
+    if(spec.sound_timer && !started)
+    {
+      sound.Start();
+      started = true;
+    }
+    
+    if(!spec.sound_timer && started)
+    {
+      started = false;
+    }
+    
     float one_width = 2.0f / 64;
     float one_height = 2.0f / 32;
     for(size_t y = 0; y < 32; y++)
