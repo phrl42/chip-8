@@ -5,6 +5,8 @@
 #include "ecs/components/QuadComponent.h"
 #include "ecs/components/TextComponent.h"
 
+#include "imgui_debug.h"
+
 namespace SANDBOX
 {
 
@@ -57,14 +59,14 @@ namespace SANDBOX
 
     if(spec.delay_timer)
     {
-      spec.delay_timer -= 60 * dt * 10;
+      spec.delay_timer -= 60 * dt * Stats::clock_rate;
     }
 
     if(spec.sound_timer)
     {
-      spec.sound_timer -= 60 * dt * 10;
+      spec.sound_timer -= 60 * dt * Stats::clock_rate;
     }
-
+    
     static bool started = false;
     if(spec.sound_timer && !started)
     {
@@ -86,7 +88,7 @@ namespace SANDBOX
 	ent[y][x].transform.proj = Banana::Projection::NONE;
 	ent[y][x].transform.pos = {(x * one_width) - 1, (((y * one_height) * -1) + 1) - one_height, 0};
 	ent[y][x].transform.size = {one_width, one_height, 0};
-	ent[y][x].transform.color = {spec.display[y][x], spec.display[y][x], spec.display[y][x], 1};
+	ent[y][x].transform.color = {spec.display[y][x] * Stats::color[0], spec.display[y][x] * Stats::color[1], spec.display[y][x] * Stats::color[2], 1};
 	ent[y][x].Render(dt);
       }
     }

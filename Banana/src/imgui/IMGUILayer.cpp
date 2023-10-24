@@ -9,6 +9,8 @@
 #include "event/Input.hpp"
 #include "event/KeyCode.h"
 
+#include "../Sandbox/src/imgui_debug.h"
+
 namespace Banana
 {
 
@@ -115,8 +117,14 @@ namespace Banana
     if(1 / dt < 59) msg = "FPS: " + std::to_string(1 / dt);
 
     ImGui::Text(msg.c_str());
-    ImGui::End();
 
+    // Edit a color (stored as ~4 floats)
+    ImGui::ColorEdit4("FG", Stats::color);
+
+    ImGui::SliderInt("Clockrate", &Stats::clock_rate, 1, 100);
+
+    ImGui::End();
+    
     ImGui::Begin("Info", nullptr, 0);
     ImGui::Text("Info text");
     ImGui::End();
