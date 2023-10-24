@@ -1,4 +1,4 @@
-# chip-8 interpreter
+# chip-88 interpreter
 
 read the title, that's what it is. a masochist way of learning low level systems
 
@@ -16,7 +16,7 @@ In order to generate makefiles, run:
 
 Compile as follows:
 
-```make```
+```make gmbh```
 
 Run game binary:
 
@@ -24,4 +24,4 @@ Run game binary:
 
 
 # Info
-Feel free to contribute
+Feel not free to contribute
