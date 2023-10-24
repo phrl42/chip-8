@@ -521,7 +521,7 @@ namespace CHIP8
 	{
 	  uint8_t row = spec->ram[spec->I + h];
 	  row = row << w;
-	  row = row >> (7 - w);
+	  row = row >> 7;
 	  
 	  if(spec->display[(y+h) % 32][(x+w) % 64] && row)
 	  {
