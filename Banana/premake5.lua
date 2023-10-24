@@ -1,4 +1,5 @@
 project "Banana"
+    cppdialect "C++17"
     kind "StaticLib"
     language "C++"
     staticruntime "off"

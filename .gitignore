@@ -4,3 +4,9 @@ compile_commands.json
 .vscode/*
 .vs/*
 bin/
+*.sln
+*.vcxproj
+*.csproj
+*.filters
+*.user
+imgui.ini

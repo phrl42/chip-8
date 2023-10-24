@@ -1,4 +1,5 @@
 project "Sandbox"
+  cppdialect "C++17"
   kind  "ConsoleApp"
   language "C++"
   staticruntime "off"
