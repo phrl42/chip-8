@@ -12,7 +12,7 @@ namespace SANDBOX
   TestLayer::TestLayer(const std::string& name)
   : name(name)
   {
-    CHIP8::Init_Spec(&spec, "assets/roms/TEST");
+    CHIP8::Init_Spec(&spec, "assets/roms/PONG");
   }
 
   TestLayer::~TestLayer()
@@ -43,14 +43,16 @@ namespace SANDBOX
 
   void TestLayer::OnUpdate(float dt)
   {
+    int mod = KEY_0;
     for(int i = KEY_0; i <= KEY_F; i++)
     {
       if(i == 58)
       {
 	i = 64;
+	mod = 55;
 	continue;
       }
-      spec.key[i] = Banana::Input::IsKeyPressed(i); 
+      spec.key[i % mod] = Banana::Input::IsKeyPressed(i); 
     }
 
     float one_width = 2.0f / 64;

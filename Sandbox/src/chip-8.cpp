@@ -593,7 +593,7 @@ namespace CHIP8
 	break;
       }
 
-      // wait for any key press
+      // wait for any key press and save it in VX
       case 0x0A:
       {
 	int8_t sub = -2;
@@ -601,7 +601,9 @@ namespace CHIP8
 	{
 	  if(spec->key[i])
 	  {
+	    spec->registers[index_X] = spec->key[i];
 	    sub = 0;
+	    break;
 	  }
 	}
 	spec->PC += sub;
@@ -697,8 +699,6 @@ namespace CHIP8
   
   void Update(Spec *spec)
   {
-    Validate_Opcode(spec);
-
     if(spec->delay_timer)
     {
       spec->delay_timer--;
@@ -708,6 +708,8 @@ namespace CHIP8
     {
       spec->sound_timer--;
     }
+    
+    Validate_Opcode(spec);
   }
   
 };
