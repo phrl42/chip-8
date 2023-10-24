@@ -3,8 +3,8 @@ project "GLFW"
 	language "C"
 	staticruntime "off"
 
-  targetdir "%{wks.location}/bin/target/%{cfg.buildcfg}/%{prj.name}"
-  objdir "%{wks.location}/bin/obj/%{cfg.buildcfg}/%{prj.name}"
+  targetdir ("%{wks.location}/bin/target/" .. outputdir .. "/%{prj.name}")
+  objdir ("%{wks.location}/bin/obj/" .. outputdir .. "/%{prj.name}")
 
 
 	files
@@ -95,6 +95,18 @@ project "GLFW"
 		{ 
 			"_GLFW_WIN32",
 			"_CRT_SECURE_NO_WARNINGS"
+		}
+
+		links
+		{
+			"Dwmapi.lib"
+		}
+
+		disablewarnings 
+		{
+		"4047",
+		"4024",
+		"4013"
 		}
 
 	filter "configurations:Debug"

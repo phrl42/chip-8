@@ -1,6 +1,5 @@
 #pragma once 
-#include "_Banana.h"
-#include "ecs/Entity.h"
+#include "event/Event.h"
 
 namespace Banana
 {

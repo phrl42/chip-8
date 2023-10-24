@@ -3,11 +3,11 @@ project "Banana"
     language "C++"
     staticruntime "off"
 
-    targetdir "%{wks.location}/bin/target/%{cfg.buildcfg}/%{prj.name}"
-    objdir "%{wks.location}/bin/obj/%{cfg.buildcfg}/%{prj.name}"
+    targetdir ("%{wks.location}/bin/target/" .. outputdir .. "/%{prj.name}")
+    objdir ("%{wks.location}/bin/obj/" .. outputdir .. "/%{prj.name}")
 
     pchheader "incs.h"
-    pchheader "miniaudio.h"
+    pchsource "%{wks.location}/Banana/src/incs.cpp"
   
     files {
       "src/**.cpp",
@@ -31,9 +31,13 @@ project "Banana"
       "%{IncludeDir.MINIAUDIO}",
       "%{wks.location}/Banana",
       "%{wks.location}/Banana/src",
-      "%{wks.location}/Banana/src/generic"
+      "%{wks.location}/Banana/src/generic",
+      "%{wks.location}/Banana/vendor/GLAD/include"
     }
 
+    filter "system:windows"
+		cppdialect "C++20"
+		systemversion "latest"
 
   filter "configurations:Debug"
     defines "BUILD_DEBUG"

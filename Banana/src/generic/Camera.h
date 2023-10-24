@@ -1,5 +1,4 @@
 #pragma once
-#include "_Banana.h"
 #include "glm.hpp"
 
 namespace Banana

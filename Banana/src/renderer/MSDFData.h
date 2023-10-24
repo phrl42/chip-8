@@ -1,5 +1,5 @@
 #include "Font.h"
-#include "_Banana.h"
+
 #include <vector>
 
 #include "msdf-atlas-gen.h"

@@ -1,6 +1,6 @@
 #pragma once
 #include "Projection.h"
-#include "_Banana.h"
+
 #include "renderer/Texture.h"
 
 #include "Component.h"

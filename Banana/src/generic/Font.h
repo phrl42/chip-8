@@ -1,5 +1,4 @@
 #pragma once
-#include "_Banana.h"
 #include "renderer/Texture.h"
 
 namespace Banana

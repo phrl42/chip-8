@@ -1,5 +1,5 @@
 #pragma once
-#include "_Banana.h"
+
 #include "layer/Layer.h"
 
 namespace Banana

@@ -1,8 +1,16 @@
 -- premake5.lua
 
 workspace "Banana"
+    architecture "x64"
     configurations { "Debug", "Release" }
     staticruntime "off"
+
+    defines {
+      "MACRO_GLFW",
+      "MACRO_OPENGL"
+    }
+
+outputdir = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
 
 IncludeDir = {}
 IncludeDir["GLFW"] = "%{wks.location}/Banana/vendor/GLFW/include"
@@ -14,11 +22,6 @@ IncludeDir["MSDFATLASGEN"] =  "%{wks.location}/Banana/vendor/MSDF-ATLAS-GEN/msdf
 IncludeDir["MSDF"] =            "%{wks.location}/Banana/vendor/MSDF-ATLAS-GEN/msdfgen"
 IncludeDir["MSDFINC"] =        "%{wks.location}/Banana/vendor/MSDF-ATLAS-GEN/msdfgen/include"
 IncludeDir["MINIAUDIO"] = "%{wks.location}/Banana/vendor/MINIAUDIO/"
-
-defines {
-  "MACRO_GLFW",
-  "MACRO_OPENGL"
-}
 
 group "dependencies"
 include "Banana/vendor/GLFW"

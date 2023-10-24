@@ -1,11 +1,10 @@
 project "freetype"
-	location "freetype"
 	kind "StaticLib"
 	language "C"
     staticruntime "off"
 
-  targetdir "%{wks.location}/bin/target/%{cfg.buildcfg}/%{prj.name}"
-  objdir "%{wks.location}/bin/obj/%{cfg.buildcfg}/%{prj.name}"
+    targetdir ("%{wks.location}/bin/target/" .. outputdir .. "/%{prj.name}")
+    objdir ("%{wks.location}/bin/obj/" .. outputdir .. "/%{prj.name}")
 
 	files {
 		"include/ft2build.h",

@@ -1,5 +1,4 @@
 #pragma once
-#include "_Banana.h"
 #include "ecs/Transform.h"
 
 namespace Banana
