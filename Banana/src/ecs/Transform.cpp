@@ -1,3 +1,4 @@
+#include "incs.h"
 #include "Transform.h"
 
 namespace Banana
@@ -7,5 +8,6 @@ namespace Banana
   {
 
   }
-  
+#include "incs.h"
+
 };

@@ -1,4 +1,4 @@
-#include "_Banana.h"
+
 #include "layer/Scene.h"
 
 namespace Banana

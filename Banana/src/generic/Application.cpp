@@ -1,3 +1,4 @@
+#include "incs.h"
 #include "Application.hpp"
 
 #include "imgui/IMGUILayer.h"
@@ -26,8 +27,8 @@ namespace Banana
 
     WindowProps prop;
     prop.Title = "Banana Engine";
-    prop.height = 1280;
-    prop.width = 720;
+    prop.height = 1000;
+    prop.width = 1600;
 
     window = Window::Create(prop);
 

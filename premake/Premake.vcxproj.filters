@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="..">
+      <UniqueIdentifier>{61705900-4DFC-870B-B6AA-880BA255880B}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\PaperEditor">
+      <UniqueIdentifier>{6F61C642-5B2F-BA48-44C3-2A6F303096AD}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\PaperEditor\Sandbunker">
+      <UniqueIdentifier>{0B7FAC1C-7741-E0A6-C0F1-6E332CF3B884}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\PaperEditor\resources">
+      <UniqueIdentifier>{B97D5559-A5A2-A4D9-CEED-8969BA71A3F7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\PaperEditor\resources\ProjectTemplate">
+      <UniqueIdentifier>{DB15961C-C792-895F-F00F-8A73DCEB25F3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\PaperRuntime">
+      <UniqueIdentifier>{8CB849AC-F843-B770-0155-3A656D5F1371}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\PaperRuntime\resources">
+      <UniqueIdentifier>{161DB25F-82DF-E5E9-CB8F-74763791BEC7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\PaperRuntime\resources\ProjectTemplate">
+      <UniqueIdentifier>{38CF7707-A4E9-DAA8-ED0B-EB3C596502B0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\engine">
+      <UniqueIdentifier>{E617D869-5282-8CE0-9BC0-3D86076A6A35}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\engine\lib">
+      <UniqueIdentifier>{0C3A6946-78FA-E47C-4135-2EFAADB42959}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\engine\lib\STB_IMAGE">
+      <UniqueIdentifier>{A66C6722-12A4-AFB9-1BAE-13DD8764D6B2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\engine\lib\box2d">
+      <UniqueIdentifier>{5A4D7673-C6AE-5381-4F1C-9A33BB7C8A40}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\engine\lib\glad">
+      <UniqueIdentifier>{9334C81A-7F18-8970-E878-83C3D47B73F2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\engine\lib\glfw">
+      <UniqueIdentifier>{4B35C81A-3719-8970-A079-83C38C7C73F2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\engine\lib\imgui">
+      <UniqueIdentifier>{76A0F373-E201-D181-6B6F-1734D7CF0741}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\engine\lib\imguizmo">
+      <UniqueIdentifier>{2C6A122B-1864-3B7D-01D1-D18DED69A1E9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\engine\lib\implot">
+      <UniqueIdentifier>{90796CF2-7C08-F6BB-2527-0AB711950662}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\engine\lib\miniaudio">
+      <UniqueIdentifier>{5A3990AC-C670-D843-CF7A-3C673B31FF3C}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\engine\lib\msdf-atlas-gen">
+      <UniqueIdentifier>{6EAA6B15-5A65-5BC1-031D-D40BEFB6A551}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\engine\lib\msdf-atlas-gen\msdfgen">
+      <UniqueIdentifier>{E1B01C3B-CD97-DE32-76E8-445062AE5799}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\engine\lib\nativefiledialog-extended">
+      <UniqueIdentifier>{10AEC351-7C3D-853C-8539-6654F147C048}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\engine\lib\spdlog">
+      <UniqueIdentifier>{C4C4EF09-B053-79D3-5972-8DCE45E08979}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\engine\lib\yaml-cpp">
+      <UniqueIdentifier>{3EAEAF60-2AA8-D8B2-1315-6FC3FFAD3E1F}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\scriptcore">
+      <UniqueIdentifier>{EEC64EAA-5A87-CAE0-23C2-135E8F410FBD}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\setup">
+      <UniqueIdentifier>{E14B7B3A-CD18-D645-F631-C4EDE25D0BD4}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\PaperEditor\Sandbunker\premake5.lua">
+      <Filter>..\PaperEditor\Sandbunker</Filter>
+    </None>
+    <None Include="..\PaperEditor\premake5.lua">
+      <Filter>..\PaperEditor</Filter>
+    </None>
+    <None Include="..\PaperEditor\resources\ProjectTemplate\premake5.lua">
+      <Filter>..\PaperEditor\resources\ProjectTemplate</Filter>
+    </None>
+    <None Include="..\PaperRuntime\premake5.lua">
+      <Filter>..\PaperRuntime</Filter>
+    </None>
+    <None Include="..\PaperRuntime\resources\ProjectTemplate\premake5.lua">
+      <Filter>..\PaperRuntime\resources\ProjectTemplate</Filter>
+    </None>
+    <None Include="..\engine\lib\STB_IMAGE\premake5.lua">
+      <Filter>..\engine\lib\STB_IMAGE</Filter>
+    </None>
+    <None Include="..\engine\lib\box2d\premake5.lua">
+      <Filter>..\engine\lib\box2d</Filter>
+    </None>
+    <None Include="..\engine\lib\glad\premake5.lua">
+      <Filter>..\engine\lib\glad</Filter>
+    </None>
+    <None Include="..\engine\lib\glfw\premake5.lua">
+      <Filter>..\engine\lib\glfw</Filter>
+    </None>
+    <None Include="..\engine\lib\imgui\premake5.lua">
+      <Filter>..\engine\lib\imgui</Filter>
+    </None>
+    <None Include="..\engine\lib\imguizmo\premake5.lua">
+      <Filter>..\engine\lib\imguizmo</Filter>
+    </None>
+    <None Include="..\engine\lib\implot\premake5.lua">
+      <Filter>..\engine\lib\implot</Filter>
+    </None>
+    <None Include="..\engine\lib\miniaudio\premake5.lua">
+      <Filter>..\engine\lib\miniaudio</Filter>
+    </None>
+    <None Include="..\engine\lib\msdf-atlas-gen\msdfgen\premake5.lua">
+      <Filter>..\engine\lib\msdf-atlas-gen\msdfgen</Filter>
+    </None>
+    <None Include="..\engine\lib\msdf-atlas-gen\premake5.lua">
+      <Filter>..\engine\lib\msdf-atlas-gen</Filter>
+    </None>
+    <None Include="..\engine\lib\nativefiledialog-extended\premake5.lua">
+      <Filter>..\engine\lib\nativefiledialog-extended</Filter>
+    </None>
+    <None Include="..\engine\lib\spdlog\premake5.lua">
+      <Filter>..\engine\lib\spdlog</Filter>
+    </None>
+    <None Include="..\engine\lib\yaml-cpp\premake5.lua">
+      <Filter>..\engine\lib\yaml-cpp</Filter>
+    </None>
+    <None Include="..\engine\premake5.lua">
+      <Filter>..\engine</Filter>
+    </None>
+    <None Include="..\premake5.lua">
+      <Filter>..</Filter>
+    </None>
+    <None Include="..\scriptcore\premake5.lua">
+      <Filter>..\scriptcore</Filter>
+    </None>
+    <None Include="..\setup\premake5.lua">
+      <Filter>..\setup</Filter>
+    </None>
+    <None Include="premake5.lua" />
+  </ItemGroup>
+</Project>

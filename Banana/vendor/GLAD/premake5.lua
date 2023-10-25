@@ -3,17 +3,22 @@ project "GLAD"
 	language "C"
 	staticruntime "off"
 
-  targetdir "%{wks.location}/bin/target/%{cfg.buildcfg}/%{prj.name}"
-  objdir "%{wks.location}/bin/obj/%{cfg.buildcfg}/%{prj.name}"
+  targetdir ("%{wks.location}/bin/target/" .. outputdir .. "/%{prj.name}")
+  objdir ("%{wks.location}/bin/obj/" .. outputdir .. "/%{prj.name}")
 
 
 	files{
-		"src/glad.c",
+		"include/glad/glad.h",
+		"include/KHR/khrplatform.h",
+		"src/glad.c"
 	}
 
-  includedirs{
-    "include/"
-  }
+	  includedirs{
+		"include"
+	  }
+
+  filter "system:windows"
+		systemversion "latest"
 
 	filter "configurations:Debug"
 		runtime "Debug"

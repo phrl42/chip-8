@@ -1,5 +1,5 @@
 #pragma once
-#include "_Banana.h"
+
 #include "renderer/VertexArray.h"
 
 namespace Banana

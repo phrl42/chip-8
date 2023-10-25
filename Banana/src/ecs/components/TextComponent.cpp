@@ -1,3 +1,4 @@
+#include "incs.h"
 #include "TextComponent.h"
 #include "Font.h"
 #include "renderer/Renderer2D.h"

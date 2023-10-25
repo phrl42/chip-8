@@ -1,10 +1,9 @@
 #pragma once
-#include "_Banana.h"
 #include "renderer/Texture.h"
-#include "utility.h"
 
 #include "generic/Camera.h"
 #include "generic/Font.h"
+#include "Projection.h"
 
 namespace Banana
 {

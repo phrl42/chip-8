@@ -2,5 +2,5 @@
 
 namespace Banana
 {
-  enum Projection {NONE=0, ORTHOGRAPHIC, PERSPECTIVE};
+	enum Projection { NONE = 0, ORTHOGRAPHIC, PERSPECTIVE };
 };

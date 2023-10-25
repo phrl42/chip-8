@@ -1,7 +1,5 @@
 #pragma once
 
-#include "_Banana.h"
-
 #include "miniaudio.h"
 
 namespace Banana
@@ -12,12 +10,14 @@ namespace Banana
     public:
       SoundHelper()
       {
-        if(int success = ma_engine_init(NULL, &engine); success != MA_SUCCESS)
-        {
-          LOG("Could not init engine: " + std::to_string(success));
-        }
+      	int success = ma_engine_init(NULL, &engine);
+		if(success != MA_SUCCESS)
+		{
+		  LOG("Could not init engine: " + std::to_string(success));
+		}
 
-        if(int success = ma_engine_start(&engine); success != MA_SUCCESS)
+        success = ma_engine_start(&engine);
+        if(success != MA_SUCCESS)
         {
           LOG("Could not start engine: " + std::to_string(success));
         }

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "_Banana.h"
+
 #include "Window.hpp"
 #include "layer/Layer.h"
 #include "layer/SceneStack.h"
