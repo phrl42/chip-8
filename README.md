@@ -1,6 +1,6 @@
 # chip-8 interpreter
 
-read the title, that's what it is. a masochist way of learning low level systems
+the "hello world" of low level programming
 
 # Resources:
 
@@ -10,18 +10,26 @@ read the title, that's what it is. a masochist way of learning low level systems
 
 # Instructions
 
-In order to generate makefiles, run:
+Generate build files:
+
+Windows:
+
+```run.bat```
+
+Then open the Visual Studio Solution and compile the "Sandbox" Project.
+
+Linux:
+
+You should install premake5 on linux.
 
 ```premake5 gmake2```
-
-Compile as follows:
 
 ```make```
 
 Run game binary:
 
-```bin/target/Debug/Sandbox/Sandbox```
+```./run.sh```
 
 
 # Info
-Feel free to contribute
+This is Linux and Windows compatible. All dependencies are within this repository.
