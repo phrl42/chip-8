@@ -122,8 +122,6 @@ namespace Banana
     // Edit a color (stored as ~4 floats)
     ImGui::ColorEdit4("FG", Stats::color);
 
-    ImGui::SliderInt("Clockrate", &Stats::clock_rate, 1, 100);
-
     ImGui::End();
     
     ImGui::Begin("Info", nullptr, 0);

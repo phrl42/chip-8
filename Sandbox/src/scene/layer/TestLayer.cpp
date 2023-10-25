@@ -14,7 +14,7 @@ namespace SANDBOX
   TestLayer::TestLayer(const std::string& name)
     : name(name), sound(Banana::Sound("assets/sounds/test.wav", false))
   {
-    CHIP8::Init_Spec(&spec, "assets/roms/PONG2");
+    CHIP8::Init_Spec(&spec, "assets/roms/AIRPLANE");
   }
 
   TestLayer::~TestLayer()
@@ -59,12 +59,12 @@ namespace SANDBOX
 
     if(spec.delay_timer)
     {
-      spec.delay_timer -= 60 * dt * Stats::clock_rate;
+      spec.delay_timer -= 60 * dt * 8;
     }
 
     if(spec.sound_timer)
     {
-      spec.sound_timer -= 60 * dt * Stats::clock_rate;
+      spec.sound_timer -= 60 * dt * 8;
     }
     
     static bool started = false;
