@@ -33,4 +33,4 @@ Run game binary:
 # Info
 This is Linux and Windows compatible. All dependencies are within this repository.
 
-<a href="https://codeberg.org/phrl42/chip-8/raw/commit/a463d4b791dfc0dbeb7d16673b21c51dfcfce021/screenshot.png"></a>
+<img src="https://codeberg.org/phrl42/chip-8/raw/commit/a463d4b791dfc0dbeb7d16673b21c51dfcfce021/screenshot.png">
