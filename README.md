@@ -12,13 +12,13 @@ the "hello world" of low level programming
 
 Generate build files:
 
-Windows:
+## Windows:
 
 ```run.bat```
 
 Then open the Visual Studio Solution and compile the "Sandbox" Project.
 
-Linux:
+## Linux:
 
 You should install premake5 on linux.
 
