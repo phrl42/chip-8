@@ -14,7 +14,7 @@ namespace SANDBOX
   TestLayer::TestLayer(const std::string& name)
     : name(name), sound(Banana::Sound("assets/sounds/test.wav", false))
   {
-    CHIP8::Init_Spec(&spec, "assets/roms/AIRPLANE");
+    CHIP8::Init_Spec(&spec, "assets/roms/TETRIS");
   }
 
   TestLayer::~TestLayer()
@@ -54,17 +54,17 @@ namespace SANDBOX
 	mod = 55;
 	continue;
       }
-      spec.key[i % mod] = Banana::Input::IsKeyPressed(i); 
+      spec.key[i % mod] = Banana::Input::IsKeyPressed(i) || Banana::Input::IsKeyRepeat(i); 
     }
 
     if(spec.delay_timer)
     {
-      spec.delay_timer -= 60 * dt * 8;
+      spec.delay_timer -= 1;
     }
 
     if(spec.sound_timer)
     {
-      spec.sound_timer -= 60 * dt * 8;
+      spec.sound_timer -= 1;
     }
     
     static bool started = false;
